@@ -72,34 +72,9 @@ dynamic "ingress" {
     to_port          = 0
     protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
   }
 
   tags = {
     Name = "Public Instance SG-${local.sufix}"
   }
-}
-
-module "mybucket" {
-  source = "./modulos/s3"
-  bucket_name = "nombreunico12345"
-}
-
-output "s3_arn" {
-  value = module.mybucket.s3_bucket_arn
-}
-
-module "terraform_state_backend" {
-  source = "cloudposse/tfstate-backend/aws"
-  # Cloud Posse recommends pinning every module to a specific version
-  version    = "1.4.1"
-  namespace  = "example"
-  stage      = "prod"
-  name       = "terraform-udemy-course-lytch"
-  environment = "us-east-1"
-  attributes = ["state"]
-
-  terraform_backend_config_file_path = "."
-  terraform_backend_config_file_name = "backend.tf"
-  force_destroy                      = false
 }
